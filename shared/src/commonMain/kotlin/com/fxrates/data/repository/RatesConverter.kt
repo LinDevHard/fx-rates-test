@@ -34,9 +34,13 @@ class RatesConverter {
     }
 
     /** The days of [timeSeries] that have a rate for [code], oldest first. */
-    fun toRateHistory(timeSeries: TimeSeriesDto, code: String): List<RatePoint> = timeSeries.rates
-        .mapNotNull { (date, rates) -> rates[code]?.let { rate -> RatePoint(LocalDate.parse(date), rate.toDecimal()) } }
-        .sortedBy(RatePoint::date)
+    fun toRateHistory(timeSeries: TimeSeriesDto, code: String): List<RatePoint> {
+        return timeSeries.rates
+            .mapNotNull { (date, rates) ->
+                rates[code]?.let { rate -> RatePoint(LocalDate.parse(date), rate.toDecimal()) }
+            }
+            .sortedBy(RatePoint::date)
+    }
 
     // Going through the string keeps the decimal digits the API sent: 0.89158 stays 0.89158
     // instead of the nearest binary double.
