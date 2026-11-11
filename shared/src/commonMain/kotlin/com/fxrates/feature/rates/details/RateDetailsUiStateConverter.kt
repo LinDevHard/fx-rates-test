@@ -35,7 +35,7 @@ internal class RateDetailsUiStateConverter {
     }
 
     private fun createData(state: RateDetailsStore.State, points: List<RatePoint>): Content {
-        val first = points.firstOrNull() ?: return Content.NoData
+        if (points.isEmpty()) return Content.NoData
         val last = points.last()
         return Content.Data(
             rate = Strings.currentRate(
@@ -44,13 +44,15 @@ internal class RateDetailsUiStateConverter {
                 code = state.code,
             ),
             date = last.date.toString(),
-            change = createChange(first = first, last = last),
+            change = createChange(points = points),
             history = points.asReversed().map(::toItem),
         )
     }
 
-    private fun createChange(first: RatePoint, last: RatePoint): Change {
-        if (first == last) return Change.NotEnoughData
+    private fun createChange(points: List<RatePoint>): Change {
+        if (points.size < 2) return Change.NotEnoughData
+        val first = points.first()
+        val last = points.last()
         val change = RateChangeCalculator.calculate(first.rate, last.rate) ?: return Change.NotEnoughData
         return Change.Value(
             period = Strings.changePeriod(start = first.date.toString(), end = last.date.toString()),
