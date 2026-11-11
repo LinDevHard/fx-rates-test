@@ -23,6 +23,7 @@ internal data class RateDetailsUiState(
         /**
          * @property rate the latest rate, e.g. `1 USD = 0.8900 EUR`.
          * @property date the date of the latest rate.
+         * @property change the change from the earliest to the latest point, or not enough data.
          * @property history the rate of every day of the period, newest first.
          */
         data class Data(
