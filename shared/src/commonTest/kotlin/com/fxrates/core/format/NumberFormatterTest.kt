@@ -20,13 +20,13 @@ class NumberFormatterTest : FunSpec({
 
     context("formatSignedPercent") {
         withTests(
-            1.234 to "+1.23%",
-            -0.5 to "-0.50%",
-            0.0 to "0.00%",
-            0.004 to "0.00%",
-            -0.004 to "0.00%",
+            "1.234" to "+1.23%",
+            "-0.5" to "-0.50%",
+            "0" to "0.00%",
+            "0.004" to "0.00%",
+            "-0.004" to "0.00%",
         ) { (input, expected) ->
-            NumberFormatter.formatSignedPercent(input) shouldBe expected
+            NumberFormatter.formatSignedPercent(input.toBigDecimal()) shouldBe expected
         }
     }
 
