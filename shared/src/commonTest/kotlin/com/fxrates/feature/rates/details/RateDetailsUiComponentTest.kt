@@ -8,8 +8,10 @@ import com.arkivanov.mvikotlin.core.utils.isAssertOnMainThreadEnabled
 import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.fxrates.feature.rates.details.mvi.RateDetailsStoreFactory
 import com.fxrates.testing.FakeRatesRepository
+import com.fxrates.testing.ratePoint
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -75,6 +77,18 @@ class RateDetailsUiComponentTest : FunSpec({
         component.onBackClick()
 
         callbacks.backCount shouldBe 1
+    }
+
+    test("a retry reloads the history") {
+        val repository = FakeRatesRepository().apply { rateHistory = Result.failure(IllegalStateException("offline")) }
+        val component = createComponent(repository, InstanceKeeperDispatcher())
+        component.state.value.content shouldBe RateDetailsUiState.Content.Error
+        repository.rateHistory = Result.success(listOf(ratePoint()))
+
+        component.onRetry()
+
+        repository.requestedHistories shouldBe listOf("USD" to "EUR", "USD" to "EUR")
+        component.state.value.content.shouldBeInstanceOf<RateDetailsUiState.Content.Data>()
     }
 
 })
