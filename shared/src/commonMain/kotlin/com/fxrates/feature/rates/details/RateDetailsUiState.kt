@@ -24,12 +24,14 @@ internal data class RateDetailsUiState(
          * @property rate the latest rate, e.g. `1 USD = 0.8900 EUR`.
          * @property date the date of the latest rate.
          * @property change the change from the earliest to the latest point, or not enough data.
+         * @property chart the rate over the period, drawn above the history.
          * @property history the rate of every day of the period, newest first.
          */
         data class Data(
             val rate: String,
             val date: String,
             val change: Change,
+            val chart: Chart,
             val history: List<HistoryItem>,
         ) : Content()
 
@@ -47,6 +49,25 @@ internal data class RateDetailsUiState(
             val percent: String,
             val trend: Trend,
         ) : Change()
+
+    }
+
+    @Immutable
+    sealed class Chart {
+
+        /** Fewer than two points: there is no line to draw. */
+        data object NotEnoughData : Chart()
+
+        /**
+         * @property points the rate of every day, oldest first, from `0` (the period [min]) to `1` (its [max]).
+         * @property trend the change over the period; it colours the line.
+         */
+        data class Line(
+            val points: List<Float>,
+            val min: String,
+            val max: String,
+            val trend: Trend,
+        ) : Chart()
 
     }
 

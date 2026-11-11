@@ -2,12 +2,15 @@ package com.fxrates.feature.rates.details
 
 import com.fxrates.core.format.NumberFormatter
 import com.fxrates.core.money.RateChangeCalculator
+import com.fxrates.core.money.RateScale
 import com.fxrates.core.utils.Resource
 import com.fxrates.domain.model.RatePoint
 import com.fxrates.feature.rates.details.RateDetailsUiState.Change
+import com.fxrates.feature.rates.details.RateDetailsUiState.Chart
 import com.fxrates.feature.rates.details.RateDetailsUiState.Content
 import com.fxrates.feature.rates.details.model.HistoryItem
 import com.fxrates.feature.rates.details.mvi.RateDetailsStore
+import com.fxrates.feature.rates.model.Trend
 import com.fxrates.feature.rates.model.toTrend
 import com.fxrates.ui.Strings
 import me.tatarka.inject.annotations.Inject
@@ -37,6 +40,7 @@ internal class RateDetailsUiStateConverter {
     private fun createData(state: RateDetailsStore.State, points: List<RatePoint>): Content {
         if (points.isEmpty()) return Content.NoData
         val last = points.last()
+        val change = createChange(points = points)
         return Content.Data(
             rate = Strings.currentRate(
                 base = state.base,
@@ -44,7 +48,8 @@ internal class RateDetailsUiStateConverter {
                 code = state.code,
             ),
             date = last.date.toString(),
-            change = createChange(points = points),
+            change = change,
+            chart = createChart(points = points, change = change),
             history = points.asReversed().map(::toItem),
         )
     }
@@ -59,6 +64,17 @@ internal class RateDetailsUiStateConverter {
             absolute = NumberFormatter.formatSignedRate(change.absolute),
             percent = NumberFormatter.formatSignedPercent(change.percent),
             trend = change.toTrend(),
+        )
+    }
+
+    private fun createChart(points: List<RatePoint>, change: Change): Chart {
+        if (points.size < 2) return Chart.NotEnoughData
+        val rates = points.map(RatePoint::rate)
+        return Chart.Line(
+            points = RateScale.normalize(rates),
+            min = NumberFormatter.formatRate(rates.min()),
+            max = NumberFormatter.formatRate(rates.max()),
+            trend = (change as? Change.Value)?.trend ?: Trend.Flat,
         )
     }
 

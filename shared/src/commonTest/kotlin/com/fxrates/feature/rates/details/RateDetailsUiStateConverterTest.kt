@@ -2,6 +2,7 @@ package com.fxrates.feature.rates.details
 
 import com.fxrates.core.utils.Resource
 import com.fxrates.feature.rates.details.RateDetailsUiState.Change
+import com.fxrates.feature.rates.details.RateDetailsUiState.Chart
 import com.fxrates.feature.rates.details.RateDetailsUiState.Content
 import com.fxrates.feature.rates.details.mvi.RateDetailsStore
 import com.fxrates.feature.rates.model.Trend
@@ -103,6 +104,38 @@ class RateDetailsUiStateConverterTest : FunSpec({
 
         content.history.map { item -> item.date } shouldBe listOf("2026-11-10", "2026-10-20", "2026-10-13")
         content.history.map { item -> item.rate } shouldBe listOf("0.8900", "0.8850", "0.8800")
+    }
+
+    test("one point is not enough for a chart") {
+        val content = converter.createUiState(state(LocalDate(2026, 11, 10) to "0.89"))
+            .content.shouldBeInstanceOf<Content.Data>()
+
+        content.chart shouldBe Chart.NotEnoughData
+    }
+
+    test("the chart goes oldest first, between the period min and max, coloured by the change") {
+        val content = converter.createUiState(
+            state(
+                LocalDate(2026, 10, 13) to "0.885",
+                LocalDate(2026, 10, 20) to "0.88",
+                LocalDate(2026, 11, 10) to "0.89",
+            ),
+        ).content.shouldBeInstanceOf<Content.Data>()
+
+        content.chart shouldBe Chart.Line(
+            points = listOf(0.5f, 0f, 1f),
+            min = "0.8800",
+            max = "0.8900",
+            trend = Trend.Up,
+        )
+    }
+
+    test("a chart without a defined change is flat") {
+        val content = converter.createUiState(
+            state(LocalDate(2026, 10, 13) to "0", LocalDate(2026, 11, 10) to "0.89"),
+        ).content.shouldBeInstanceOf<Content.Data>()
+
+        content.chart.shouldBeInstanceOf<Chart.Line>().trend shouldBe Trend.Flat
     }
 
 })
