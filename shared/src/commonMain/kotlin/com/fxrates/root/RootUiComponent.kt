@@ -64,7 +64,6 @@ internal class RootUiComponentDefault(
                 ),
             )
         }
-
         is Config.RateDetails -> {
             Child.RateDetails(
                 rateDetailsFactory.create(
