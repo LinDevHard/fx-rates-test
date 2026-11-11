@@ -1,8 +1,6 @@
 package com.fxrates.feature.rates.list
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -28,6 +25,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.fxrates.feature.rates.list.RatesListUiState.Content
 import com.fxrates.feature.rates.list.model.RateItem
 import com.fxrates.feature.rates.model.color
+import com.fxrates.feature.rates.ui.Centered
+import com.fxrates.feature.rates.ui.ErrorState
 import com.fxrates.ui.Strings
 import com.fxrates.ui.theme.AppTheme
 
@@ -140,27 +139,6 @@ private fun RateRow(
             Text(change, style = MaterialTheme.typography.bodySmall, color = item.trend.color())
         }
     }
-}
-
-@Composable
-private fun ErrorState(onRetry: () -> Unit) = Centered {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(AppTheme.spacing.s),
-    ) {
-        Text(Strings.ERROR_TITLE, style = MaterialTheme.typography.bodyLarge)
-        Button(onClick = onRetry) {
-            Text(Strings.RETRY)
-        }
-    }
-}
-
-@Composable
-private fun Centered(content: @Composable () -> Unit) = Box(
-    modifier = Modifier.fillMaxSize(),
-    contentAlignment = Alignment.Center,
-) {
-    content.invoke()
 }
 
 @Preview
