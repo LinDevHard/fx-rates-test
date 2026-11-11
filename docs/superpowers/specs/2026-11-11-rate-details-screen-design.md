@@ -80,7 +80,7 @@ what `NumberFormatter` already does.
 - `RatesConverter.toRateHistory(timeSeries: TimeSeriesDto, code: String): List<RatePoint>` —
   takes the `code` entry of each date, skips dates without it, sorts ascending, converts through
   the string form to `BigDecimal` (the existing `toDecimal()`).
-- `RatesRepositoryImpl.getRateHistory` computes `start = today(UTC) - 30 days` with the injected
+- `RatesRepositoryImpl.getRateHistory` computes `start = today(UTC) - 29 days` with the injected
   `Clock` (same pattern as `LOOKBACK_DAYS`), calls `getTimeSeries(base, start, symbols = code)`
   and the converter.
 - Frankfurter answers a window without data with `404 {"message":"not found"}` (checked by hand),
@@ -175,7 +175,7 @@ Every commit compiles and keeps the tests and detekt green.
 ## Calls made by Claude (not discussed with the user)
 
 - Screen name and package: `RateDetails`, `feature/rates/details/`.
-- "30 days" = 30 calendar days back from today (UTC), so about 21 business-day points.
+- "30 days" = 30 calendar days ending today (UTC), start = today - 29 days, so about 21 business-day points.
 - Change = latest point vs earliest point of the window.
 - History newest first, date shown as ISO `yyyy-MM-dd` like the list subtitle.
 - With one point the one-row history is still shown.

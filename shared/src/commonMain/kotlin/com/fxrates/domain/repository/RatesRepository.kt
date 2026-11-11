@@ -9,7 +9,7 @@ interface RatesRepository {
     suspend fun getLatestRates(base: String): List<CurrencyRate>
 
     /**
-     * The rates of [code] against [base] for the last 30 calendar days, oldest first. Empty when
+     * The rates of [code] against [base] for the last 30 calendar days, today included, oldest first. Empty when
      * there is no data for that window.
      */
     suspend fun getRateHistory(base: String, code: String): List<RatePoint>

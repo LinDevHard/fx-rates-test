@@ -31,7 +31,7 @@ class RatesRepositoryImpl(
     }
 
     override suspend fun getRateHistory(base: String, code: String): List<RatePoint> {
-        val start = clock.todayIn(TimeZone.UTC).minus(DatePeriod(days = HISTORY_DAYS))
+        val start = clock.todayIn(TimeZone.UTC).minus(DatePeriod(days = HISTORY_DAYS - 1))
         return try {
             val timeSeries = api.getTimeSeries(base = base, start = start, symbols = code)
             converter.toRateHistory(timeSeries = timeSeries, code = code)

@@ -55,7 +55,7 @@ class RatesRepositoryImplTest : FunSpec({
             request = incoming
             respond(
                 content = """
-                    {"base":"USD","start_date":"2026-10-12","end_date":"2026-11-10","rates":{
+                    {"base":"USD","start_date":"2026-10-13","end_date":"2026-11-10","rates":{
                         "2026-11-10":{"EUR":0.89},
                         "2026-10-13":{"EUR":0.88}
                     }}
@@ -66,7 +66,7 @@ class RatesRepositoryImplTest : FunSpec({
 
         val history = repository.getRateHistory(base = "USD", code = "EUR")
 
-        request.url.encodedPath shouldEndWith "2026-10-12.."
+        request.url.encodedPath shouldEndWith "2026-10-13.."
         request.url.parameters["base"] shouldBe "USD"
         request.url.parameters["symbols"] shouldBe "EUR"
         history shouldBe listOf(
