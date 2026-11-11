@@ -2,6 +2,7 @@ package com.fxrates.data.repository
 
 import com.fxrates.data.remote.dto.TimeSeriesDto
 import com.fxrates.domain.model.CurrencyRate
+import com.fxrates.domain.model.RatePoint
 import com.ionspin.kotlin.bignum.decimal.BigDecimal
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import kotlinx.datetime.LocalDate
@@ -31,6 +32,11 @@ class RatesConverter {
             }
             .sortedBy(CurrencyRate::code)
     }
+
+    /** The days of [timeSeries] that have a rate for [code], oldest first. */
+    fun toRateHistory(timeSeries: TimeSeriesDto, code: String): List<RatePoint> = timeSeries.rates
+        .mapNotNull { (date, rates) -> rates[code]?.let { rate -> RatePoint(LocalDate.parse(date), rate.toDecimal()) } }
+        .sortedBy(RatePoint::date)
 
     // Going through the string keeps the decimal digits the API sent: 0.89158 stays 0.89158
     // instead of the nearest binary double.

@@ -1,6 +1,7 @@
 package com.fxrates.testing
 
 import com.fxrates.domain.model.CurrencyRate
+import com.fxrates.domain.model.RatePoint
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import kotlinx.datetime.LocalDate
 
@@ -17,3 +18,8 @@ fun currencyRate(
     rate = rate.toBigDecimal(),
     previousRate = previousRate?.toBigDecimal(),
 )
+
+fun ratePoint(
+    date: LocalDate = LocalDate(2026, 11, 10),
+    rate: String = "0.89",
+): RatePoint = RatePoint(date = date, rate = rate.toBigDecimal())

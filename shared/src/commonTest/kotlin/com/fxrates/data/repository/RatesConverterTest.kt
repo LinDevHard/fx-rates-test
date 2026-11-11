@@ -2,6 +2,7 @@ package com.fxrates.data.repository
 
 import com.fxrates.data.remote.dto.TimeSeriesDto
 import com.fxrates.domain.model.CurrencyRate
+import com.fxrates.domain.model.RatePoint
 import com.ionspin.kotlin.bignum.decimal.toBigDecimal
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldBeEmpty
@@ -68,6 +69,32 @@ class RatesConverterTest : FunSpec({
         val timeSeries = TimeSeriesDto(base = "USD", startDate = "", endDate = "", rates = emptyMap())
 
         converter.toLatestRates(timeSeries, currencies = emptyMap()).shouldBeEmpty()
+    }
+
+    test("the history keeps the dates that have the currency, oldest first") {
+        val timeSeries = TimeSeriesDto(
+            base = "USD",
+            startDate = "2026-10-13",
+            endDate = "2026-11-10",
+            rates = mapOf(
+                "2026-11-10" to mapOf("EUR" to 0.89),
+                "2026-10-13" to mapOf("EUR" to 0.88),
+                "2026-10-20" to mapOf("JPY" to 157.9),
+            ),
+        )
+
+        val history = converter.toRateHistory(timeSeries, code = "EUR")
+
+        history shouldBe listOf(
+            RatePoint(LocalDate(2026, 10, 13), "0.88".toBigDecimal()),
+            RatePoint(LocalDate(2026, 11, 10), "0.89".toBigDecimal()),
+        )
+    }
+
+    test("an empty time series gives an empty history") {
+        val timeSeries = TimeSeriesDto(base = "USD", startDate = "", endDate = "", rates = emptyMap())
+
+        converter.toRateHistory(timeSeries, code = "EUR").shouldBeEmpty()
     }
 
 })

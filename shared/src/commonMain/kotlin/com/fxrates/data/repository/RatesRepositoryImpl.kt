@@ -2,7 +2,10 @@ package com.fxrates.data.repository
 
 import com.fxrates.data.remote.FrankfurterApi
 import com.fxrates.domain.model.CurrencyRate
+import com.fxrates.domain.model.RatePoint
 import com.fxrates.domain.repository.RatesRepository
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.datetime.DatePeriod
@@ -27,8 +30,20 @@ class RatesRepositoryImpl(
         converter.toLatestRates(timeSeries = timeSeries.await(), currencies = currencies.await())
     }
 
+    override suspend fun getRateHistory(base: String, code: String): List<RatePoint> {
+        val start = clock.todayIn(TimeZone.UTC).minus(DatePeriod(days = HISTORY_DAYS))
+        return try {
+            val timeSeries = api.getTimeSeries(base = base, start = start, symbols = code)
+            converter.toRateHistory(timeSeries = timeSeries, code = code)
+        } catch (exception: ClientRequestException) {
+            // Frankfurter answers a window without any rates with 404 instead of an empty body.
+            if (exception.response.status == HttpStatusCode.NotFound) emptyList() else throw exception
+        }
+    }
+
     private companion object {
 
+        const val HISTORY_DAYS = 30
         const val LOOKBACK_DAYS = 7
 
     }
