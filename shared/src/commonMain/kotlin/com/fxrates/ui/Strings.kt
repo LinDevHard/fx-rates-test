@@ -12,7 +12,17 @@ object Strings {
     const val ERROR_TITLE = "Could not load the rates"
     const val RETRY = "Retry"
     const val REFRESH = "Refresh"
+    const val RATE_HISTORY_TITLE = "Last 30 days"
+    const val NO_DATA = "No data for the period"
+    const val NOT_ENOUGH_DATA = "Not enough data to calculate the change"
+    const val BACK = "Back"
 
     fun ratesSubtitle(base: String, date: String): String = "1 $base · $date"
+
+    fun rateDetailsTitle(code: String, base: String): String = "$code / $base"
+
+    fun currentRate(base: String, rate: String, code: String): String = "1 $base = $rate $code"
+
+    fun changePeriod(start: String, end: String): String = "Change $start – $end"
 
 }
