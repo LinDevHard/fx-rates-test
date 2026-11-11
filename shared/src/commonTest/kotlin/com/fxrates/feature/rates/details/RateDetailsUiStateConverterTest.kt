@@ -54,15 +54,17 @@ class RateDetailsUiStateConverterTest : FunSpec({
     }
 
     test("the change over the period is signed and relative to the first point") {
-        val uiState = converter.createUiState(
+        val content = converter.createUiState(
             state(
                 LocalDate(2026, 10, 13) to "0.88",
                 LocalDate(2026, 10, 20) to "0.885",
                 LocalDate(2026, 11, 10) to "0.89",
             ),
-        )
+        ).content.shouldBeInstanceOf<Content.Data>()
 
-        uiState.content.shouldBeInstanceOf<Content.Data>().change shouldBe Change.Value(
+        content.rate shouldBe "1 USD = 0.8900 EUR"
+        content.date shouldBe "2026-11-10"
+        content.change shouldBe Change.Value(
             period = "Change 2026-10-13 – 2026-11-10",
             absolute = "+0.0100",
             percent = "+1.14%",
