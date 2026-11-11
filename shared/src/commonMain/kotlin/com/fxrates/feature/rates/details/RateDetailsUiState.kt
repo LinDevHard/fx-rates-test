@@ -38,6 +38,7 @@ internal data class RateDetailsUiState(
     @Immutable
     sealed class Change {
 
+        /** Fewer than two points or an earliest rate of zero: the change is undefined. */
         data object NotEnoughData : Change()
 
         data class Value(
