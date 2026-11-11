@@ -3,8 +3,8 @@ package com.fxrates.feature.rates.list
 import com.fxrates.core.utils.Empty
 import com.fxrates.core.utils.Resource
 import com.fxrates.feature.rates.list.RatesListUiState.Content
-import com.fxrates.feature.rates.list.model.Trend
 import com.fxrates.feature.rates.list.mvi.RatesListStore
+import com.fxrates.feature.rates.model.Trend
 import com.fxrates.testing.currencyRate
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe

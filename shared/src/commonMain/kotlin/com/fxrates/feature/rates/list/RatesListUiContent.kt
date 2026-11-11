@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.fxrates.feature.rates.list.RatesListUiState.Content
 import com.fxrates.feature.rates.list.model.RateItem
-import com.fxrates.feature.rates.list.model.Trend
+import com.fxrates.feature.rates.model.color
 import com.fxrates.ui.Strings
 import com.fxrates.ui.theme.AppTheme
 
@@ -161,13 +161,6 @@ private fun Centered(content: @Composable () -> Unit) = Box(
     contentAlignment = Alignment.Center,
 ) {
     content.invoke()
-}
-
-@Composable
-private fun Trend.color() = when (this) {
-    Trend.Up -> AppTheme.colors.positive
-    Trend.Down -> AppTheme.colors.negative
-    Trend.Flat -> AppTheme.colors.neutral
 }
 
 @Preview

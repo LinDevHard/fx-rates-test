@@ -7,8 +7,8 @@ import com.fxrates.core.utils.Resource
 import com.fxrates.domain.model.CurrencyRate
 import com.fxrates.feature.rates.list.RatesListUiState.Content
 import com.fxrates.feature.rates.list.model.RateItem
-import com.fxrates.feature.rates.list.model.Trend
 import com.fxrates.feature.rates.list.mvi.RatesListStore
+import com.fxrates.feature.rates.model.toTrend
 import com.fxrates.ui.Strings
 import me.tatarka.inject.annotations.Inject
 
@@ -55,17 +55,12 @@ internal class RatesListUiStateConverter {
 
     private fun toItem(rate: CurrencyRate): RateItem {
         val change = rate.previousRate?.let { previous -> RateChangeCalculator.calculate(previous, rate.rate) }
-        val trend = when {
-            change == null || change.absolute.isZero() -> Trend.Flat
-            change.absolute.isPositive -> Trend.Up
-            else -> Trend.Down
-        }
         return RateItem(
             code = rate.code,
             name = rate.name,
             rate = NumberFormatter.formatRate(rate.rate),
             change = change?.let { value -> NumberFormatter.formatSignedPercent(value.percent) },
-            trend = trend,
+            trend = change.toTrend(),
         )
     }
 

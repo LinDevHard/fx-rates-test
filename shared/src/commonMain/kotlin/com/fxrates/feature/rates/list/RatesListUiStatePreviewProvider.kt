@@ -3,7 +3,7 @@ package com.fxrates.feature.rates.list
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.fxrates.feature.rates.list.RatesListUiState.Content
 import com.fxrates.feature.rates.list.model.RateItem
-import com.fxrates.feature.rates.list.model.Trend
+import com.fxrates.feature.rates.model.Trend
 
 internal class RatesListUiStatePreviewProvider : PreviewParameterProvider<RatesListUiState> {
 

@@ -1,6 +1,7 @@
 package com.fxrates.feature.rates.list.model
 
 import androidx.compose.runtime.Immutable
+import com.fxrates.feature.rates.model.Trend
 
 /**
  * One row of the rates list. Every text field is already formatted for display.
@@ -15,11 +16,3 @@ data class RateItem(
     val change: String?,
     val trend: Trend,
 )
-
-enum class Trend {
-
-    Up,
-    Down,
-    Flat,
-
-}
