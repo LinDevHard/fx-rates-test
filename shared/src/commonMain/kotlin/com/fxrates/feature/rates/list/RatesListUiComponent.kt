@@ -70,11 +70,11 @@ internal class RatesListUiComponentDefault(
 
     init {
         store.labels
-            .onEach(::handleLabel)
+            .onEach(::openCurrency)
             .launchIn(scope)
     }
 
-    private fun handleLabel(label: RatesListStore.Label) {
+    private fun openCurrency(label: RatesListStore.Label) {
         when (label) {
             is RatesListStore.Label.OpenCurrency -> callbacks.onOpenCurrency(base = label.base, code = label.code)
         }

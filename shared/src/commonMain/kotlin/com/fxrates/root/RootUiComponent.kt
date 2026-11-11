@@ -42,7 +42,7 @@ internal class RootUiComponentDefault(
     override val stack: Value<ChildStack<*, Child>> = childStack(
         source = navigation,
         serializer = Config.serializer(),
-        initialConfiguration = Config.RatesList,
+        initialConfiguration = Config.RatesList(base = DEFAULT_BASE_CURRENCY),
         handleBackButton = true,
         childFactory = ::createChild,
     )
@@ -52,7 +52,7 @@ internal class RootUiComponentDefault(
             Child.RatesList(
                 ratesListFactory.create(
                     componentContext = componentContext,
-                    base = DEFAULT_BASE_CURRENCY,
+                    base = config.base,
                     callbacks = RatesListCallbacks(),
                 ),
             )
@@ -71,7 +71,7 @@ internal class RootUiComponentDefault(
     sealed class Config {
 
         @Serializable
-        data object RatesList : Config()
+        data class RatesList(val base: String) : Config()
 
     }
 
