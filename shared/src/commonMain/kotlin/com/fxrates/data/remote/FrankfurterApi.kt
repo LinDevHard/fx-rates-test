@@ -19,12 +19,21 @@ class FrankfurterApi(
 
     /**
      * The rates for every business day from [start] to [end] inclusive; `null` [end] means
-     * "up to the latest available date".
+     * "up to the latest available date". Only the currencies in [symbols] (comma-separated codes)
+     * are returned; `null` means all of them.
      */
-    suspend fun getTimeSeries(base: String, start: LocalDate, end: LocalDate? = null): TimeSeriesDto {
+    suspend fun getTimeSeries(
+        base: String,
+        start: LocalDate,
+        end: LocalDate? = null,
+        symbols: String? = null,
+    ): TimeSeriesDto {
         val path = "$start..${end ?: ""}"
         return httpClient.get(path) {
             parameter("base", base)
+            if (symbols != null) {
+                parameter("symbols", symbols)
+            }
         }.body()
     }
 
