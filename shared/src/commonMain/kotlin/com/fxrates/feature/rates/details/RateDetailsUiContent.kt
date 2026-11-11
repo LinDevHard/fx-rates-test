@@ -21,6 +21,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.fxrates.feature.rates.details.RateDetailsUiState.Change
@@ -85,7 +86,13 @@ private fun Header(
     TextButton(onClick = onBackClick) {
         Text(Strings.BACK)
     }
-    Text(title, style = MaterialTheme.typography.headlineMedium)
+    Text(
+        text = title,
+        style = MaterialTheme.typography.headlineMedium,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis,
+        modifier = Modifier.weight(1f),
+    )
 }
 
 @Composable
