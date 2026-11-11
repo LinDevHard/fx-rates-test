@@ -14,6 +14,7 @@ import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockRequestHandler
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.engine.mock.respondError
+import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.ServerResponseException
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
@@ -86,6 +87,20 @@ class RatesRepositoryImplTest : FunSpec({
         val repository = repository { respondError(HttpStatusCode.InternalServerError) }
 
         shouldThrow<ServerResponseException> { repository.getRateHistory(base = "USD", code = "EUR") }
+    }
+
+    test("a client error other than not found is not hidden") {
+        val repository = repository {
+            respond(
+                content = """{"message":"bad request"}""",
+                status = HttpStatusCode.BadRequest,
+                headers = jsonHeaders,
+            )
+        }
+
+        val failure = shouldThrow<ClientRequestException> { repository.getRateHistory(base = "USD", code = "EUR") }
+
+        failure.response.status shouldBe HttpStatusCode.BadRequest
     }
 
 })
