@@ -57,6 +57,9 @@ Compose ─click─► UiComponent ─accept(Intent)─► Executor ─forward(A
 
 - `abstract class XxxUiComponent` exposes `state: StateFlow<XxxUiState>` and one function per
   user action. The composable only knows this contract.
+- **The Store is obtained through `instanceKeeper.getStore { storeFactory.createStore(...) }`,
+  never created directly.** The instance keeper retains it across configuration changes (rotation
+  keeps the loaded data and the user's input) and disposes it when the component is destroyed.
 - `XxxUiComponentDefault` owns the Store, maps `states` through the converter and turns `Label`s
   into `Callbacks` calls.
 

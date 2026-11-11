@@ -2,6 +2,7 @@ package com.fxrates.feature.rates.list
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.mvikotlin.core.instancekeeper.getStore
 import com.arkivanov.mvikotlin.extensions.coroutines.labels
 import com.arkivanov.mvikotlin.extensions.coroutines.states
 import com.fxrates.feature.rates.list.mvi.RatesListStore
@@ -60,7 +61,7 @@ internal class RatesListUiComponentDefault(
 
     private val scope = coroutineScope()
 
-    private val store = storeFactory.createStore(base = base)
+    private val store = instanceKeeper.getStore { storeFactory.createStore(base = base) }
 
     override val state: StateFlow<RatesListUiState> = store.states
         .map(uiStateConverter::createUiState)
