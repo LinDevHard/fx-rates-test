@@ -23,6 +23,10 @@ object Strings {
 
     fun currentRate(base: String, rate: String, code: String): String = "1 $base = $rate $code"
 
+    fun chartMax(rate: String): String = "Max $rate"
+
+    fun chartMin(rate: String): String = "Min $rate"
+
     fun changePeriod(start: String, end: String): String = "Change $start – $end"
 
 }

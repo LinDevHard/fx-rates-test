@@ -2,6 +2,7 @@ package com.fxrates.feature.rates.details
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,25 +11,32 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import com.fxrates.feature.rates.details.RateDetailsUiState.Change
+import com.fxrates.feature.rates.details.RateDetailsUiState.Chart
 import com.fxrates.feature.rates.details.RateDetailsUiState.Content
 import com.fxrates.feature.rates.details.model.HistoryItem
 import com.fxrates.feature.rates.model.color
 import com.fxrates.feature.rates.ui.Centered
 import com.fxrates.feature.rates.ui.ErrorState
 import com.fxrates.ui.Strings
+import com.fxrates.ui.chart.LineChart
+import com.fxrates.ui.icons.AppIcons
 import com.fxrates.ui.theme.AppTheme
+
+private const val ChartAspectRatio = 2.5f
 
 @Composable
 fun RateDetailsUiContent(
@@ -79,11 +87,11 @@ private fun Header(
 ) = Row(
     modifier = Modifier
         .fillMaxWidth()
-        .padding(horizontal = AppTheme.spacing.m, vertical = AppTheme.spacing.s),
+        .padding(horizontal = AppTheme.spacing.xs, vertical = AppTheme.spacing.s),
     verticalAlignment = Alignment.CenterVertically,
 ) {
-    TextButton(onClick = onBackClick) {
-        Text(Strings.BACK)
+    IconButton(onClick = onBackClick) {
+        Icon(imageVector = AppIcons.ArrowBack, contentDescription = Strings.BACK)
     }
     Text(
         text = title,
@@ -101,6 +109,11 @@ private fun DataList(content: Content.Data) = LazyColumn(modifier = Modifier.fil
     }
     item {
         ChangeBlock(change = content.change)
+    }
+    if (content.chart is Chart.Line) {
+        item {
+            RateChart(chart = content.chart)
+        }
     }
     item {
         Text(
@@ -146,6 +159,33 @@ private fun ChangeBlock(change: Change) = Column(
         }
     }
 }
+
+@Composable
+private fun RateChart(chart: Chart.Line) = Column(
+    modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = AppTheme.spacing.m, vertical = AppTheme.spacing.s),
+) {
+    ChartLabel(text = Strings.chartMax(chart.max))
+    LineChart(
+        points = chart.points,
+        color = chart.trend.color(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .aspectRatio(ChartAspectRatio)
+            .padding(vertical = AppTheme.spacing.xs),
+    )
+    ChartLabel(text = Strings.chartMin(chart.min))
+}
+
+@Composable
+private fun ChartLabel(text: String) = Text(
+    text = text,
+    style = MaterialTheme.typography.bodySmall,
+    color = AppTheme.colors.neutral,
+    textAlign = TextAlign.End,
+    modifier = Modifier.fillMaxWidth(),
+)
 
 @Composable
 private fun HistoryRow(item: HistoryItem) = Row(
