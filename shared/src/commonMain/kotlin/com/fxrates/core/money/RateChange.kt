@@ -19,7 +19,7 @@ object RateChangeCalculator {
     fun calculate(previous: BigDecimal, current: BigDecimal): RateChange? {
         if (previous.isZero()) return null
         val absolute = current - previous
-        val percent = absolute.doubleValue(exactRequired = false) / current.doubleValue(exactRequired = false) * 100
+        val percent = absolute.doubleValue(exactRequired = false) / previous.doubleValue(exactRequired = false) * 100
         return RateChange(absolute = absolute, percent = percent)
     }
 

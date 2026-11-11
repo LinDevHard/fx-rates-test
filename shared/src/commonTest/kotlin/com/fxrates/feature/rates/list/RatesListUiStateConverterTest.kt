@@ -41,6 +41,13 @@ class RatesListUiStateConverterTest : FunSpec({
         items[2].change shouldBe null
     }
 
+    test("the change is formatted relative to the previous rate") {
+        val items = converter.createUiState(state()).content.shouldBeInstanceOf<Content.Items>().items
+
+        items[0].change shouldBe "+1.14%"
+        items[1].change shouldBe "-0.13%"
+    }
+
     test("the query filters by code and by name, ignoring case") {
         val byCode = converter.createUiState(state(query = "jp")).content.shouldBeInstanceOf<Content.Items>()
         val byName = converter.createUiState(state(query = "swiss")).content.shouldBeInstanceOf<Content.Items>()
