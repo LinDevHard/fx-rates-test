@@ -61,13 +61,14 @@ class RateDetailsUiComponentTest : FunSpec({
     }
 
     test("a recreated component reuses the retained store and does not load the history again") {
-        val repository = FakeRatesRepository()
+        val repository = FakeRatesRepository().apply { rateHistory = Result.success(listOf(ratePoint())) }
         val instanceKeeper = InstanceKeeperDispatcher()
         createComponent(repository, instanceKeeper)
 
-        createComponent(repository, instanceKeeper)
+        val recreated = createComponent(repository, instanceKeeper)
 
         repository.requestedHistories shouldBe listOf("USD" to "EUR")
+        recreated.state.value.content.shouldBeInstanceOf<RateDetailsUiState.Content.Data>()
     }
 
     test("a back click calls the back callback") {
