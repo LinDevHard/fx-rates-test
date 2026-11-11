@@ -35,8 +35,8 @@ class RateDetailsUiStateConverterTest : FunSpec({
         converter.createUiState(error).content shouldBe Content.Error
     }
 
-    test("the title names the currency and the base") {
-        converter.createUiState(state()).title shouldBe "EUR / USD"
+    test("the title is the pair, base first") {
+        converter.createUiState(state()).title shouldBe "USD / EUR"
     }
 
     test("no points give the no-data state") {

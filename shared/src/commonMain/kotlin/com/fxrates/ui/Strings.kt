@@ -19,7 +19,7 @@ object Strings {
 
     fun ratesSubtitle(base: String, date: String): String = "1 $base · $date"
 
-    fun rateDetailsTitle(code: String, base: String): String = "$code / $base"
+    fun rateDetailsTitle(base: String, code: String): String = "$base / $code"
 
     fun currentRate(base: String, rate: String, code: String): String = "1 $base = $rate $code"
 

@@ -10,7 +10,7 @@ internal class RateDetailsUiStatePreviewProvider : PreviewParameterProvider<Rate
 
     override val values: Sequence<RateDetailsUiState> = sequenceOf(
         RateDetailsUiState(
-            title = "EUR / USD",
+            title = "USD / EUR",
             content = Content.Data(
                 rate = "1 USD = 0.8916 EUR",
                 date = "2026-11-02",
@@ -28,7 +28,7 @@ internal class RateDetailsUiStatePreviewProvider : PreviewParameterProvider<Rate
             ),
         ),
         RateDetailsUiState(
-            title = "EUR / USD",
+            title = "USD / EUR",
             content = Content.Data(
                 rate = "1 USD = 0.8916 EUR",
                 date = "2026-11-02",
@@ -36,9 +36,9 @@ internal class RateDetailsUiStatePreviewProvider : PreviewParameterProvider<Rate
                 history = listOf(HistoryItem(date = "2026-11-02", rate = "0.8916")),
             ),
         ),
-        RateDetailsUiState(title = "EUR / USD", content = Content.Loading),
-        RateDetailsUiState(title = "EUR / USD", content = Content.Error),
-        RateDetailsUiState(title = "EUR / USD", content = Content.NoData),
+        RateDetailsUiState(title = "USD / EUR", content = Content.Loading),
+        RateDetailsUiState(title = "USD / EUR", content = Content.Error),
+        RateDetailsUiState(title = "USD / EUR", content = Content.NoData),
     )
 
 }

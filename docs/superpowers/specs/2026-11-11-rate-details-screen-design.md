@@ -113,7 +113,7 @@ feature/rates/details/
 │   ├── RateDetailsExecutor.kt       loadHistory(action) via resourceFlow { … }.onEach { dispatch }.launchIn(scope)
 │   └── RateDetailsStoreFactory.kt   SimpleBootstrapper(Action.LoadHistory(base, code))
 ├── model/                           @Immutable HistoryItem(date, rate) — formatted strings
-├── RateDetailsUiState.kt            title (`EUR / USD`), content: Loading | Error | NoData | Data(...)
+├── RateDetailsUiState.kt            title (`USD / EUR`), content: Loading | Error | NoData | Data(...)
 ├── RateDetailsUiStateConverter.kt   all formatting and the change calculation
 ├── RateDetailsUiComponent.kt        onRetry(), onBackClick(); Default with Factory and Callbacks.onBack()
 ├── RateDetailsUiContent.kt          public composable + private stateless overload + previews
@@ -181,7 +181,7 @@ Every commit compiles and keeps the tests and detekt green.
 - With one point the one-row history is still shown.
 - `Trend` moved to `feature/rates/model/` and the trend rule shared; commit 2 also switches
   `RatesListUiStateConverter` to the shared rule.
-- Title `EUR / USD`, no subtitle; change label shows the actual first and last dates.
+- Title `USD / EUR`, no subtitle; change label shows the actual first and last dates.
 - A zero earliest rate is treated as "not enough data".
 - No refresh button, no currency name.
 

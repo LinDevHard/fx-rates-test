@@ -17,7 +17,7 @@ internal class RateDetailsUiStateConverter {
 
     fun createUiState(state: RateDetailsStore.State): RateDetailsUiState {
         return RateDetailsUiState(
-            title = Strings.rateDetailsTitle(code = state.code, base = state.base),
+            title = Strings.rateDetailsTitle(base = state.base, code = state.code),
             content = createContent(state),
         )
     }
